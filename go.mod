@@ -1,4 +1,4 @@
-module github.com/grendeloz/cmdjp
+module github.com/grendeloz/cmdh
 
 go 1.18
 
