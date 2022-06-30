@@ -10,11 +10,6 @@ import (
 	"time"
 )
 
-var (
-	Tool    string
-	Version string
-)
-
 // Run environment
 type RunParameters struct {
 	Tool      string
@@ -26,14 +21,6 @@ type RunParameters struct {
 	GroupId   int
 	GroupName string
 	HostName  string
-}
-
-func SetVersion(v string) {
-	Version = v
-}
-
-func SetTool(t string) {
-	Tool = t
 }
 
 // Return a record with execution parameters
@@ -64,8 +51,6 @@ func NewRunParameters() RunParameters {
 	// Setup and return RunParameters
 	var run RunParameters
 	run.StartTime = time.Now()
-	run.Tool = Tool
-	run.Version = Version
 	run.Args = os.Args
 	run.UserId = userId
 	run.UserName = userName

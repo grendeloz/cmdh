@@ -22,7 +22,7 @@ var (
 	FlagLogFile    string
 	FlagLogLevel   string
 	FlagVerbose    bool
-	RunParams      RunParameters
+	runParams      RunParameters
 )
 
 // Initialise adds global (Persistent) flags to the cobra root command
@@ -34,9 +34,9 @@ var (
 //       cmdh.Initialise(rootCmd, "myapp", "v0.1.0-dev")
 //
 func Initialise(rootCmd *cobra.Command, tool, version string) {
-	SetTool(tool)
-	SetVersion(version)
-	RunParams = NewRunParameters()
+	runParams = NewRunParameters()
+	runParams.Tool = tool
+	runParams.Version = version
 
 	// Persistent flags, global for the application.
 	rootCmd.PersistentFlags().StringVar(&FlagConfigFile, "config",
@@ -102,11 +102,11 @@ func StartLogging() {
 	}
 
 	// Log key execution parameters
-	log.Info("Tool: ", RunParams.Tool, ` `, RunParams.Version)
-	log.Info("Cmdline: ", RunParams.Args)
-	log.Info("Host: ", RunParams.HostName)
-	log.Infof("User: %d (%s)", RunParams.UserId, RunParams.UserName)
-	log.Infof("Group: %d (%s)", RunParams.GroupId, RunParams.GroupName)
+	log.Info("Tool: ", runParams.Tool, ` `, runParams.Version)
+	log.Info("Cmdline: ", runParams.Args)
+	log.Info("Host: ", runParams.HostName)
+	log.Infof("User: %d (%s)", runParams.UserId, runParams.UserName)
+	log.Infof("Group: %d (%s)", runParams.GroupId, runParams.GroupName)
 
 	// Read config file (default or user-supplied)
 	initConfig()
@@ -118,7 +118,7 @@ func StartLogging() {
 // FinishLogging logs elapsed time.
 func FinishLogging() {
 	end := time.Now()
-	elapsed := end.Sub(RunParams.StartTime)
+	elapsed := end.Sub(runParams.StartTime)
 	log.Info("Elapsed time: ", elapsed)
 }
 
@@ -191,11 +191,11 @@ func initConfig() {
 // Tool returns the name of the application. This relies on appropriate
 // values being supplied to Initialise.
 func Tool() string {
-	return RunParams.Tool
+	return runParams.Tool
 }
 
 // Version returns the version of the application. This relies on
 // appropriate values being supplied to Initialise.
 func Version() string {
-	return RunParams.Version
+	return runParams.Version
 }
