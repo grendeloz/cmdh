@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/grendeloz/runp"
 	homedir "github.com/mitchellh/go-homedir"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -22,7 +23,7 @@ var (
 	FlagLogFile    string
 	FlagLogLevel   string
 	FlagVerbose    bool
-	runParams      RunParameters
+	runParams      runp.RunParameters
 )
 
 // Initialise adds global (Persistent) flags to the cobra root command
@@ -34,9 +35,11 @@ var (
 //       cmdh.Initialise(rootCmd, "myapp", "v0.1.0-dev")
 //
 func Initialise(rootCmd *cobra.Command, tool, version string) {
-	runParams = NewRunParameters()
-	runParams.Tool = tool
-	runParams.Version = version
+    // Set runp globals
+	runp.SetTool(tool)
+	runp.SetVersion(version)
+    // Get RunParameters
+	runParams = runp.NewRunParameters()
 
 	// Persistent flags, global for the application.
 	rootCmd.PersistentFlags().StringVar(&FlagConfigFile, "config",
